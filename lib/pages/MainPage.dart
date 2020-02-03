@@ -1,4 +1,5 @@
 import 'package:ast_apps/models/AllProgress.dart';
+import 'package:ast_apps/pages/sector.dart';
 import 'package:ast_apps/widgets/homePageBackground.dart';
 import 'package:ast_apps/widgets/listProgress.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,9 @@ class _MainPageState extends State < MainPage > {
                 ),
                 ListTile(
                   title: Text("Sector"),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Sector()));
+                  },
                 ),
                 ListTile(
                   title: Text("Summary"),

@@ -59,7 +59,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State < MyHomePage > {
   int _counter = 0;
 
-  List < Divisions > divisions = < Divisions > [Divisions(1, "Fresh & Weighted"), Divisions(2, "Non Fresh & Non Weighted")];
+  List < Divisions > divisions = < Divisions > [
+    Divisions(1, "Fresh & Weighted"), 
+    Divisions(2, "Non Fresh & Non Weighted")];
 
   Divisions _divisionChoosed;
 
@@ -90,7 +92,7 @@ class _MyHomePageState extends State < MyHomePage > {
           child: Column(
             children: < Widget > [
               Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/background.png'),

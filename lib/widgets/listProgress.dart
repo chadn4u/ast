@@ -30,10 +30,10 @@ class AllProgressList extends StatelessWidget{
                       Text(allProgress.progressName,
                       maxLines: 1,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                           GaugeCharts(allProgress),
                         
