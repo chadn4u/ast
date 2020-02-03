@@ -24,7 +24,7 @@ class _MainPageState extends State < MainPage > {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text("Main Page"),
+        title: Text("Mains Page"),
       ),
       drawer: Drawer(
         child: Align(

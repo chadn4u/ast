@@ -40,6 +40,21 @@ class Sector extends StatefulWidget{
               return CreateCardSector(sectorModel: lstSector[index],);
           }),
       ),
+      bottomNavigationBar: Container(
+      height: 55.0,
+      child: BottomAppBar(
+        color: Colors.red,
+        shape: CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        ),
+      ),
+    ),
+    floatingActionButton: FloatingActionButton(onPressed: (){},
+    backgroundColor: Colors.red,
+    child: Icon(Icons.add),
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

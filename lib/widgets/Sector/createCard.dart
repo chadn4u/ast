@@ -10,16 +10,23 @@ class CreateCardSector extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8.0,
-      margin: EdgeInsets.symmetric(horizontal: 10,vertical: 6),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(143, 148, 251, 1),
+    return InkWell(
+      onTap: (){
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Sector ${sectorModel.sectorName} clicked")
+          )
+        );
+      },
+        child: Card(
+        elevation: 8.0,
+        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 6),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: MakeListSector(sectorModel: sectorModel,),
         ),
-        child: MakeListSector(sectorModel: sectorModel,),
-      ),
 
+      ),
     );
   }
 

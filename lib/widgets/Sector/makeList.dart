@@ -21,27 +21,28 @@ class MakeListSector extends StatelessWidget{
             )
           )
         ),
-        child: Text(sectorModel.sector,style: TextStyle(fontSize: 35),),
+        child: Text(sectorModel.sector,style: TextStyle(fontSize: 35,color: Colors.white),),
       ),
       title: Align(
         alignment: Alignment.center,
-        child: Text(sectorModel.sectorName,style: TextStyle(fontWeight: FontWeight.bold),)),
+        child: Text(sectorModel.sectorName,style: TextStyle(fontWeight: FontWeight.bold,
+        color: Colors.white),)),
       subtitle: Column(
         children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(sectorModel.area,)
+            child: Text(sectorModel.area,style: TextStyle(color: Colors.white))
           ),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(sectorModel.pic,)
+            child: Text(sectorModel.pic,style: TextStyle(color: Colors.white))
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(right: 10),
                 padding: EdgeInsets.only(right: 10),
-                child: Text(sectorModel.lock1.toString()),
+                child: Text(sectorModel.lock1.toString(),style: TextStyle(color: Colors.white),),
                 decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
@@ -51,7 +52,9 @@ class MakeListSector extends StatelessWidget{
                     )
                 ),
               ),
-              Text(sectorModel.lock3.toString()),
+              Text(sectorModel.lock3.toString(),style: TextStyle(
+                color: Colors.white
+              ),),
             ],
           )
         ],
