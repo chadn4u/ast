@@ -5,8 +5,11 @@ import 'package:ast_apps/widgets/Sector/makeList.dart';
 
 class CreateCardSector extends StatelessWidget{
   final SectorModel sectorModel;
+  final Function fnc;
+  final bool flagFirstTime;
+  final Map mapKey;
 
-  CreateCardSector({this.sectorModel});
+  CreateCardSector({this.sectorModel,this.fnc,@required this.flagFirstTime,this.mapKey});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class CreateCardSector extends StatelessWidget{
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
           ),
-          child: MakeListSector(sectorModel: sectorModel,),
+          child: MakeListSector(sectorModel: sectorModel,fnc:fnc,flagFirstTime: flagFirstTime,mapKey: mapKey,),
         ),
 
       ),

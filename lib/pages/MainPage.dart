@@ -85,7 +85,8 @@ class _MainPageState extends State < MainPage > {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                  child: Center(child: getTime()),
+                  child: Center(child: Text('tai') //getTime()
+                  ),
               ),
               SizedBox(
                 height: 60,
