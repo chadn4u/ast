@@ -1,8 +1,9 @@
 import 'package:ast_apps/models/SectorModel.dart';
 import 'package:ast_apps/utils/sessions/sharedPreferences.dart';
 import 'package:flutter/material.dart';
-import 'package:ast_apps/widgets/Sector/createCard.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+// import 'package:ast_apps/widgets/Sector/createCard.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class Sector extends StatefulWidget {
@@ -15,6 +16,15 @@ class _SectorState extends State < Sector > {
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
+
+  final titleController = TextEditingController();
+
+  final idSectorController = TextEditingController();
+
+  final picController = TextEditingController();
+  List < String > lstArea = ['Shop', 'Warehouse', 'test'];
+
+  String areaChoosed;
 
   List < SectorModel > lstSector = [
     SectorModel(area: 'Shop', sector: 'Sec1', sectorName: 'Sector 1', pic: 'Chad', lock1: 20, lock2: 0, lock3: 140),
@@ -35,7 +45,11 @@ class _SectorState extends State < Sector > {
   Future < bool > _firstTime;
   BuildContext mContext;
   Map dataMap = Map();
+  // Future < BuildContext > mContext;
 
+  Future < BuildContext > insertContext(BuildContext ctx) async {
+    return ctx;
+  }
 
   void changeStateFirstTime(bool firstTimeP) {
     setState(() {
@@ -47,19 +61,21 @@ class _SectorState extends State < Sector > {
   @override
   void initState() {
     super.initState();
-    dataMap['_one'] = _one;
-    dataMap['_two'] = _two;
-    dataMap['_three'] = _three;
+    
     bool temp;
+    // areaChoosed = lstArea[0];
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+      ShowCaseWidget.of(mContext).startShowCase([_one, _two, _three]));
     _firstTime = SessionManagement.getBool('firstTime').then((value) {
       // print(value);
       setState(() {
         if (value == null) {
           SessionManagement.setBool('firstTime', true);
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-            ShowCaseWidget.of(mContext).startShowCase([_one, _two, _three]));
+          temp = true;
+
 
         } else {
+
           temp = value;
           SessionManagement.setBool('firstTime', value);
         }
@@ -67,50 +83,63 @@ class _SectorState extends State < Sector > {
       });
       return temp;
     });
+
+
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text('Sector'),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: FutureBuilder(
-        future: _firstTime,
-        builder: (context, AsyncSnapshot < bool > snapshot) {
+      body: ShowCaseWidget(
+        onFinish: () {
+          SessionManagement.setBool('firstTime', false);
+          changeStateFirstTime(false);
+        },
+        builder: Builder(builder: (context) {
           mContext = context;
-          if(snapshot.hasData){
-            return Container(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: snapshot.data ? lstSectorFirstTime.length : lstSector.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CreateCardSector(sectorModel: snapshot.data ? lstSectorFirstTime[index] : lstSector[index],
-                  fnc: changeStateFirstTime,flagFirstTime: snapshot.data,mapKey: dataMap, );
-              }),
-            );
-          }else{
-            return Container(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount:  lstSector.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CreateCardSector(sectorModel:  lstSector[index],
-                  fnc: changeStateFirstTime,flagFirstTime: snapshot.data,mapKey: dataMap, );
-              }),
-            );
-          }
-          
-        }
+          return FutureBuilder(
+            future: _firstTime,
+            builder: (context, AsyncSnapshot < bool > snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator();
+                default:
+                  if (snapshot.hasData) {
+                    return Container(
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data ? lstSectorFirstTime.length : lstSector.length,
+                        itemBuilder: (BuildContext context, int index) {
+
+                          return _createCardSector(index, snapshot.data);
+                          // CreateCardSector(sectorModel: snapshot.data ? lstSectorFirstTime[index] : lstSector[index],
+                          //   fnc: changeStateFirstTime,flagFirstTime: snapshot.data,mapKey: dataMap, );
+                        }),
+                    );
+                  } else {
+                    return Container(
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: lstSector.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _createCardSector(index, false);
+                          // CreateCardSector(sectorModel:  lstSector[index],
+                          //   fnc: changeStateFirstTime,flagFirstTime: snapshot.data,mapKey: dataMap, );
+                        }),
+                    );
+                  }
+              }
+            }
+          );
+        })
       ),
-
-
-
       bottomNavigationBar: Container(
         height: 55.0,
         child: BottomAppBar(
@@ -121,11 +150,337 @@ class _SectorState extends State < Sector > {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {},
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(builder: (BuildContext ctx, StateSetter state) {
+                return GestureDetector(
+                  onTap: () {},
+                  behavior: HitTestBehavior.opaque,
+                  child: Card(
+                    elevation: 5,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: < Widget > [
+                          TextField(
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                            decoration: InputDecoration(
+                              labelText: 'Sector Name'),
+                            controller: idSectorController,
+                            //  onSubmitted: (_) => submitData(),
+                          ),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Title'
+                            ),
+                            controller: titleController,
+                            //  controller: amountController,
+                            //  onSubmitted: (_) => submitData(),
+                          ),
+                          Container(
+                            height: 70,
+                            child: Row(
+                              children: < Widget > [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: < Widget > [
+                                      TextField(
+                                        decoration: InputDecoration(
+                                          labelText: 'PIC'
+                                        ),
+                                        controller: picController,
+                                        //  controller: amountController,
+                                        //  onSubmitted: (_) => submitData(),
+                                      ),
+                                    ],
+                                  )
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: < Widget > [
+                                      DropdownButton < String > (
+                                        hint: Text('Pilih Area'),
+                                        isExpanded: false,
+                                        value: areaChoosed,
+                                        isDense: true,
+                                        items: lstArea.map((String item) {
+                                          return DropdownMenuItem < String > (
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: TextStyle(
+                                                color: Colors.black
+                                              ),
+                                            )
+                                          );
+                                        }).toList(),
+                                        onChanged: (String item) {
+                                          state(() {
+                                            areaChoosed = item;
+                                            print(item);
+                                          });
+                                        }),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              Scaffold.of(ctx).hideCurrentSnackBar();
+                              Scaffold.of(ctx).showSnackBar(SnackBar(content: Text("Submmit Tapped")));
+                            },
+                            child: InkWell(
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(colors: [
+                                    Colors.red,
+                                    Colors.redAccent
+                                  ])
+                                ),
+                                margin: EdgeInsets.only(top: 10),
+                                child: Center(
+                                  child: Text('Submit'),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                );
+              });
+
+            });
+        },
         backgroundColor: Colors.red,
-        child: Icon(Icons.add),
+        child: Icon(Icons.add)
+
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
+  }
+
+  _createCardSector(int index, bool flagFirstTIme) {
+    return InkWell(
+      onTap: () {
+        Scaffold.of(mContext).removeCurrentSnackBar();
+        Scaffold.of(mContext).showSnackBar(SnackBar(content: Text("Sector  clicked")));
+      },
+      child: Card(
+        elevation: 8.0,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: _makeListSector(flagFirstTIme, flagFirstTIme ? lstSectorFirstTime[index] : lstSector[index]),
+        ),
+
+      ),
+    );
+  }
+
+  _makeListSector(bool flagFirstTime, SectorModel sectorModel) {
+    return (flagFirstTime != null && flagFirstTime) ?
+      Showcase(
+        key: _one,
+        description: 'Ini Data',
+        disableAnimation: true,
+        child: ListTile(
+          leading: Container(
+            padding: EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  width: 1,
+                  color: Colors.blueAccent
+                )
+              )
+            ),
+            child: Text(sectorModel.sector, style: TextStyle(fontSize: 35, color: Colors.white), ),
+          ),
+          title: Align(
+            alignment: Alignment.center,
+            child: Text(sectorModel.sectorName, style: TextStyle(fontWeight: FontWeight.bold,
+              color: Colors.white), )),
+          subtitle: Column(
+            children: < Widget > [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(sectorModel.area, style: TextStyle(color: Colors.white))
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(sectorModel.pic, style: TextStyle(color: Colors.white))
+              ),
+              Row(
+                children: < Widget > [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(right: 10),
+                    child: Showcase(
+                      key: _two,
+                      title: 'Lock 1',
+                      description: 'Data Lock 1',
+                      showcaseBackgroundColor: Colors.blueAccent,
+                      textColor: Colors.white,
+                      shapeBorder: CircleBorder(),
+                      disableAnimation: true,
+                      child: Text(
+                        sectorModel.lock1.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          width: 1,
+                          color: Colors.blueAccent
+                        )
+                      )
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(right: 10),
+                    child: Showcase(
+                      key: _three,
+                      description: 'Ini Lock 3',
+                      title: 'Lock 3',
+
+                      showcaseBackgroundColor: Colors.blueAccent,
+                      textColor: Colors.white,
+                      shapeBorder: CircleBorder(),
+                      disableAnimation: true,
+                      child: Text(sectorModel.lock3.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          trailing: InkWell(
+            onTap: () {
+
+            },
+            child: Icon(Icons.delete, color: Colors.white, )),
+        ),
+
+      ) :
+      ListTile(
+        leading: Container(
+          padding: EdgeInsets.only(right: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              right: BorderSide(
+                width: 1,
+                color: Colors.blueAccent
+              )
+            )
+          ),
+          child: Text(sectorModel.sector, style: TextStyle(fontSize: 35, color: Colors.white), ),
+        ),
+        title: Align(
+          alignment: Alignment.center,
+          child: Text(sectorModel.sectorName, style: TextStyle(fontWeight: FontWeight.bold,
+            color: Colors.white), )),
+        subtitle: Column(
+          children: < Widget > [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(sectorModel.area, style: TextStyle(color: Colors.white))
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(sectorModel.pic, style: TextStyle(color: Colors.white))
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+              children: < Widget > [
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(right: 10),
+                  child: Text(
+                    sectorModel.lock1.toString(),
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(
+                        width: 1,
+                        color: Colors.blueAccent
+                      )
+                    )
+                  ),
+                ), Text(sectorModel.lock3.toString(),
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        trailing: InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text('Kamu Yakin?'),
+                content: Text('Kamu akan mengurangi data sector?'),
+                actions: < Widget > [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop(false);
+                    },
+                    child: Text('No', style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ))
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop(true);
+                    },
+                    child: Text('Yes', style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ))
+                  )
+                ],
+              )
+            ).then((value) {
+              if (value) {
+                setState(() {
+                  lstSector.removeWhere((item) => item.sector == sectorModel.sector);
+                });
+              }
+
+            });
+
+          },
+          child: Icon(Icons.delete, color: Colors.white, )
+        )
+      );
   }
 }

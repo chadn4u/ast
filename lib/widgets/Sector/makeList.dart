@@ -9,12 +9,14 @@ class MakeListSector extends StatefulWidget {
   final Function fnc;
   final bool flagFirstTime;
   final Map mapKey;
+  final BuildContext buildContext;
 
   MakeListSector({
     this.sectorModel,
     this.fnc,
     @required this.flagFirstTime,
-    this.mapKey
+    this.mapKey,
+    this.buildContext
   });
 
   @override

@@ -25,7 +25,6 @@ class AllProgressList extends StatelessWidget{
               Padding(
                 padding:EdgeInsets.fromLTRB(4, 0, 4, 2),
                 child:  Column(
-                    mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Text(allProgress.progressName,
                       maxLines: 1,

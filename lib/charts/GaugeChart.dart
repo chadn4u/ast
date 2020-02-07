@@ -12,8 +12,8 @@ class GaugeCharts extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return CircularPercentIndicator(
-      radius: 80,
-      lineWidth: 10,
+      radius: 70,
+      lineWidth: 8,
       percent: (allProgress.minValue/allProgress.maxValue),
       center: Text("${allProgress.minValue}/${allProgress.maxValue}"),
       progressColor: Color.fromRGBO(143, 148, 251, 1),

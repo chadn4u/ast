@@ -30,6 +30,7 @@ dependencies:
   percent_indicator: ^2.1.1
   showcaseview: ^0.1.5
   shared_preferences: ^0.5.6+1
+  rounded_letter: ^0.0.5
 
 
 

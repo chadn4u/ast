@@ -2,8 +2,14 @@ import 'package:ast_apps/Animation/FadeAnimation.dart';
 import 'package:ast_apps/models/Division.dart';
 import 'package:ast_apps/pages/MainPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  statusBarColor: Color.fromRGBO(143, 148, 251, 0.9)
+  ));
+runApp(MyApp());
+} 
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -158,7 +164,6 @@ class _MyHomePageState extends State < MyHomePage > {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
