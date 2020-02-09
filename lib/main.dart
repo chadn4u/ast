@@ -177,10 +177,13 @@ class _MyHomePageState extends State < MyHomePage > {
                               items: divisions.map((Divisions item) {
                                 return DropdownMenuItem < Divisions > (
                                   value: item,
-                                  child: Text(
-                                    item.divisionName,
-                                    style: TextStyle(
-                                      color: Colors.black
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      item.divisionName,
+                                      style: TextStyle(
+                                        color: Colors.black
+                                      ),
                                     ),
                                   )
                                 );

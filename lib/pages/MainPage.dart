@@ -1,8 +1,9 @@
 import 'package:ast_apps/models/AllProgress.dart';
 import 'package:ast_apps/pages/progress.dart';
 import 'package:ast_apps/pages/sector.dart';
-import 'package:ast_apps/widgets/homePageBackground.dart';
-import 'package:ast_apps/widgets/listProgress.dart';
+import 'package:ast_apps/pages/uncountArticle.dart';
+// import 'package:ast_apps/widgets/homePageBackground.dart';
+// import 'package:ast_apps/widgets/listProgress.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rounded_letter/rounded_letter.dart';
@@ -30,7 +31,12 @@ class _MainPageState extends State < MainPage > {
       child: Column(
         children: < Widget > [
           CircleAvatar(
-            child: Icon(icon, size: 16, color: Colors.white, ),
+            child: 
+              ImageIcon(
+                AssetImage(icon),
+                color: Colors.white
+              )//child: Icon(icon, size: 16, color: Colors.white, )
+            ,
             backgroundColor: Color.fromRGBO(143, 148, 251, 0.9),
           ),
           SizedBox(height: 10, ),
@@ -79,7 +85,9 @@ class _MainPageState extends State < MainPage > {
                 icon: Icon(
                   Icons.exit_to_app,
                   color: Colors.white, ),
-                onPressed: () {}
+                onPressed: () {
+                  Navigator.pop(context);
+                }
               )
             ],
           ),
@@ -193,14 +201,14 @@ class _MainPageState extends State < MainPage > {
                 crossAxisCount: 4, childAspectRatio: 4 / 4
               ),
               children: < Widget > [
-                _gridItem(Icons.airport_shuttle, 'Sector',Sector()),
-                _gridItem(Icons.add_shopping_cart, 'Summary',null),
-                _gridItem(Icons.arrow_drop_down_circle, 'Progress Detail',null),
-                _gridItem(Icons.bluetooth_searching, 'Stock Take Result',null),
-                _gridItem(Icons.add_location, 'Diff Countd. Article',null),
-                _gridItem(Icons.slow_motion_video, 'Uncounted Article',null),
-                _gridItem(Icons.add_location, 'Transfer to GMD',null),
-                _gridItem(Icons.pie_chart, 'Progress',Progress()),
+                _gridItem('assets/images/sector.png', 'Sector',Sector()),
+                _gridItem('assets/images/summary.png', 'Summary',null),
+                _gridItem('assets/images/progressDetail.png', 'Progress Detail',null),
+                _gridItem('assets/images/stockTakeResult.png', 'Stock Take Result',null),
+                _gridItem('assets/images/diffCount.png', 'Diff Countd. Article',null),
+                _gridItem('assets/images/count.png', 'Uncounted Article',UncountedArticle()),
+                _gridItem('assets/images/transferGmd.png', 'Transfer to GMD',null),
+                _gridItem('assets/images/progress.png', 'Progress',Progress()),
               ],
             ),
           )
@@ -258,27 +266,30 @@ class _MainPageState extends State < MainPage > {
               IconButton(
                 iconSize: 30.0,
                 padding: EdgeInsets.only(left: 1.0),
-                icon: Icon(Icons.home,color: Colors.white),
+                icon: ImageIcon(
+                  AssetImage('assets/images/scanResult.png'),
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   
                 },
               ),
-              IconButton(
-                iconSize: 30.0,
-                padding: EdgeInsets.only(right: 28.0),
-                icon: Icon(Icons.search,color: Colors.white),
-                onPressed: () {
+              // IconButton(
+              //   iconSize: 30.0,
+              //   padding: EdgeInsets.only(right: 28.0),
+              //   icon: Icon(Icons.search,color: Colors.white),
+              //   onPressed: () {
                  
-                },
-              ),
-              IconButton(
-                iconSize: 30.0,
-                padding: EdgeInsets.only(left: 38.0),
-                icon: Icon(Icons.notifications,color: Colors.white,),
-                onPressed: () {
+              //   },
+              // ),
+              // IconButton(
+              //   iconSize: 30.0,
+              //   padding: EdgeInsets.only(left: 38.0),
+              //   icon: Icon(Icons.notifications,color: Colors.white,),
+              //   onPressed: () {
                   
-                },
-              ),
+              //   },
+              // ),
               IconButton(
                 iconSize: 30.0,
                 padding: EdgeInsets.only(right: 1.0),
@@ -294,7 +305,10 @@ class _MainPageState extends State < MainPage > {
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
         backgroundColor: Color.fromRGBO(143, 148, 251, 0.9),
-        child: Icon(Icons.flash_on)
+        child: ImageIcon(
+          AssetImage('assets/images/scan.png'),
+          color:Colors.white
+        )
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

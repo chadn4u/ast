@@ -13,6 +13,7 @@ class Sector extends StatefulWidget {
 }
 
 class _SectorState extends State < Sector > {
+  final GlobalKey < ScaffoldState > _scaffoldKey = GlobalKey < ScaffoldState > ();
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
@@ -27,7 +28,7 @@ class _SectorState extends State < Sector > {
   String areaChoosed;
 
   List < SectorModel > lstSector = [
-    SectorModel(area: 'Shop', sector: 'Sec1', sectorName: 'Sector 1', pic: 'Chad', lock1: 20, lock2: 0, lock3: 140),
+    SectorModel(area: 'Shop', sector: '1', sectorName: 'Sector 1', pic: 'Chad', lock1: 20, lock2: 0, lock3: 140),
     SectorModel(area: 'Warehouse', sector: '2', sectorName: 'Sector 2', pic: 'Dipta', lock1: 30, lock2: 0, lock3: 340),
     SectorModel(area: 'Shop', sector: '3', sectorName: 'Sector 3', pic: 'Priatmoko', lock1: 40, lock2: 0, lock3: 440),
     SectorModel(area: 'Warehouse', sector: '4', sectorName: 'Sector 4', pic: 'Alan', lock1: 50, lock2: 0, lock3: 440),
@@ -61,7 +62,7 @@ class _SectorState extends State < Sector > {
   @override
   void initState() {
     super.initState();
-    
+
     bool temp;
     // areaChoosed = lstArea[0];
     WidgetsBinding.instance.addPostFrameCallback((_) =>
@@ -87,13 +88,18 @@ class _SectorState extends State < Sector > {
 
   }
 
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color.fromRGBO(143, 148, 251, 0.9)
+    ));
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         title: Text('Sector'),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Color.fromRGBO(143, 148, 251, 0.9),
       ),
       body: ShowCaseWidget(
         onFinish: () {
@@ -143,7 +149,7 @@ class _SectorState extends State < Sector > {
       bottomNavigationBar: Container(
         height: 55.0,
         child: BottomAppBar(
-          color: Colors.red,
+          color: Color.fromRGBO(143, 148, 251, 0.9),
           shape: CircularNotchedRectangle(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -234,19 +240,20 @@ class _SectorState extends State < Sector > {
                               ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: (){
-                              Scaffold.of(ctx).hideCurrentSnackBar();
-                              Scaffold.of(ctx).showSnackBar(SnackBar(content: Text("Submmit Tapped")));
-                            },
-                            child: InkWell(
+                          InkWell(
+                            child: GestureDetector(
+                              onTap: () {
+                                print('tai');
+                                Navigator.pop(ctx);
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Submit Tapped")));
+                              },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   gradient: LinearGradient(colors: [
-                                    Colors.red,
-                                    Colors.redAccent
+                                    Color.fromRGBO(143, 148, 251, 1),
+                                    Color.fromRGBO(143, 148, 251, .6)
                                   ])
                                 ),
                                 margin: EdgeInsets.only(top: 10),
@@ -255,7 +262,8 @@ class _SectorState extends State < Sector > {
                                 ),
                               ),
                             ),
-                          )
+                          ),
+
                         ],
                       ),
                     ),
@@ -265,7 +273,7 @@ class _SectorState extends State < Sector > {
 
             });
         },
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromRGBO(143, 148, 251, 1),
         child: Icon(Icons.add)
 
       ),
@@ -284,7 +292,7 @@ class _SectorState extends State < Sector > {
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            color: Color.fromRGBO(143, 148, 251, 0.9),
           ),
           child: _makeListSector(flagFirstTIme, flagFirstTIme ? lstSectorFirstTime[index] : lstSector[index]),
         ),
